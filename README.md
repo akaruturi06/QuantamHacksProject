@@ -1,2 +1,2 @@
 # QuantamHacksProject
-Ankita, Aliyah, Ruitong, Icy
+Ankita, Aliyah, Ruitong
