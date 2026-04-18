@@ -9,6 +9,7 @@ import networkx as nx
 sim = AerSimulator()
 rng = np.random.default_rng(7)
 
+#aliyah
 def circuit_superposition(n_qubits=4):
     qc = QuantumCircuit(n_qubits, n_qubits)
     for q in range(n_qubits):
@@ -16,6 +17,7 @@ def circuit_superposition(n_qubits=4):
     qc.measure(range(n_qubits), range(n_qubits))
     return qc
 
+#aliyah
 def circuit_layered_phase(n_qubits=4):
     qc = QuantumCircuit(n_qubits, n_qubits)
     for q in range(n_qubits):
@@ -26,6 +28,7 @@ def circuit_layered_phase(n_qubits=4):
     qc.measure(range(n_qubits), range(n_qubits))
     return qc
 
+#aliyah
 def circuit_ring_entangler(n_qubits=4):
     qc = QuantumCircuit(n_qubits, n_qubits)
     for q in range(n_qubits):
@@ -38,6 +41,7 @@ def circuit_ring_entangler(n_qubits=4):
     qc.measure(range(n_qubits), range(n_qubits))
     return qc
 
+#aliyah
 def fourth_circuit(n_qubits=6):
     qc = QuantumCircuit(n_qubits, n_qubits)
     for q in range(n_qubits):
@@ -55,6 +59,7 @@ circuit_library = {
     "fourth": fourth_circuit
 }
 
+#aliyah
 def run_circuits(name, shots=3000):
     if name not in circuit_library:
         raise ValueError(f"Unknown circuit: {name}")
@@ -67,6 +72,7 @@ def run_circuits(name, shots=3000):
 
     return counts
 
+#aliyah
 def get_all_counts():
     results = {}
 
@@ -75,7 +81,7 @@ def get_all_counts():
 
     return results
 
-
+# ankita-- i understand this
 def hamming(a, b): # return number of positions where they differ
     distance = 0
     if len(a) != len(b):
@@ -85,6 +91,7 @@ def hamming(a, b): # return number of positions where they differ
             distance += 1
     return distance
 
+# ankita -- kind of understand
 def build_graph(counts): # creates a network graph where each bitstring is a node (weight = counts) and edges connect pairs with Hamming distance exactly 1
     graph = nx.Graph()
     for bitstring,count in counts.items():
@@ -98,9 +105,40 @@ def build_graph(counts): # creates a network graph where each bitstring is a nod
 
     return graph
 
+#ankita -- dont really understand
 def get_layout(graph): # runs nx.spring_layout(graph, seed=42) and returns the position dict. Use seed=42 so positions are stable across reruns
     return nx.spring_layout(graph, seed=42)
 
+#ankita -- kind of understand
+def calculate_entropy(counts):
+    total = sum(counts.values())
+    entropy_dict = {}
+
+    for bitstring, count in counts.items():
+        p = count / total
+        entropy = -p * np.log2(p) if p > 0 else 0
+        entropy_dict[bitstring] = entropy
+
+    return entropy_dict
+
+#ankita -- no idea what this does
+def get_graph_data(counts):
+    graph = build_graph(counts)
+    entropies = calculate_entropy(counts)
+
+    nodes = []
+    for node in graph.nodes():
+        nodes.append({
+            'id': node,
+            'count': counts[node],
+            'entropy': entropies[node]
+        })
+
+    edges = list(graph.edges())
+
+    layout = get_layout(graph)
+
+    return nodes, edges, layout
 
 
 all_counts = get_all_counts()
